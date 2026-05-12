@@ -205,6 +205,43 @@ All three tables write to the `dbw_cms_medallion_dev.gold` schema (Unity Catalog
 
 ### Infrastructure — Terraform
 
+**Terraform file roles**:
+
+| File | Role |
+|---|---|
+| `variables.tf` | Declares variable names, types, and descriptions |
+| `terraform.tfvars` | Supplies values for variables (gitignored) |
+| `providers.tf` | Configures azurerm and databricks provider plugins; databricks provider references `azurerm_databricks_workspace.this.id` from `main.tf` |
+| `main.tf` | All resource definitions and their interdependencies |
+| `outputs.tf` | Exposes resource attributes (workspace URL, cluster ID, etc.) after apply |
+
+**Resource dependency chain** (Terraform resolves these automatically):
+
+```
+azurerm_resource_group
+  ├── azurerm_storage_account
+  │     ├── azurerm_storage_data_lake_gen2_filesystem (bronze, silver, gold)
+  │     ├── azurerm_role_assignment.access_connector_adls
+  │     ├── azurerm_role_assignment.current_user_adls
+  │     └── databricks_external_location (bronze, silver, gold)
+  ├── azurerm_databricks_workspace  ←─ activates databricks provider
+  └── azurerm_databricks_access_connector
+        ├── azurerm_role_assignment.access_connector_adls
+        └── databricks_storage_credential
+              └── databricks_external_location (bronze, silver, gold)
+
+databricks_secret_scope
+  └── databricks_secret (databricks_pat)
+
+databricks_cluster (references data.databricks_current_user)
+  └── databricks_job (cms-medallion-pipeline workflow)
+
+data.databricks_current_user
+  ├── databricks_cluster
+  ├── databricks_workspace_file × 5  (dbt project files)
+  └── databricks_job                 (notebook paths)
+```
+
 **Variable file flow**:
 
 ```
