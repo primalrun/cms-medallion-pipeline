@@ -110,7 +110,7 @@ Targets dual-billing providers (appear in both programs). Computes specialty ben
 
 **Batch writes for bronze ingestion** — The Medicare API returns 9.66M rows via pagination. Writing each 5,000-row page directly to Delta (overwrite first, append thereafter) avoids accumulating the full dataset in driver memory. The Medicaid parquet (238M rows) is copied directly to ADLS staging via `dbutils.fs.cp` before Spark reads it, bypassing the `/tmp` restriction in Unity Catalog.
 
-**Silver grain normalization** — Raw Medicare has one row per provider/HCPCS/place-of-service, causing fan-out when joining. Silver aggregates to provider/HCPCS grain using `first()` for provider metadata (specialty, state). Raw Medicaid has one row per billing provider/servicing provider/HCPCS/month; silver aggregates to billing provider/HCPCS/month.
+**Silver grain normalization** — Raw Medicare has one row per provider/HCPCS/place-of-service, causing fan-out when joining. Silver aggregates to provider/HCPCS grain: all billing measures (`total_services`, `total_beneficiaries`, payment amounts) are summed or averaged across locations so no activity is lost. Provider metadata (`specialty`, `state`) uses `first()` — a provider billing the same HCPCS from multiple locations may have multiple values, and `first()` picks one representative rather than exploding rows. Raw Medicaid has one row per billing provider/servicing provider/HCPCS/month; silver aggregates to billing provider/HCPCS/month, summing totals across all servicing providers.
 
 **Unity Catalog auth via managed identity** — ADLS Gen2 access uses a Databricks Access Connector (system-assigned managed identity) with `Storage Blob Data Contributor` role, avoiding storage account keys entirely.
 
