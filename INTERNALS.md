@@ -205,6 +205,21 @@ All three tables write to the `dbw_cms_medallion_dev.gold` schema (Unity Catalog
 
 ### Infrastructure — Terraform
 
+**Variable file flow**:
+
+```
+terraform.tfvars          variables.tf            main.tf                  Provisioned resource
+(gitignored)              (type + description)    (var.* reference)
+─────────────────────────────────────────────────────────────────────────────────────────────
+subscription_id      →    string                → azurerm provider        Azure subscription target
+location             →    string (default:eastus)→ all azurerm resources  Azure region
+project + environment→    string                → local.name_suffix       Resource naming (e.g. rg-cms-medallion-dev)
+databricks_pat       →    string (sensitive)    → databricks_secret       Secret scope "cms", key "databricks_pat"
+alert_email          →    string                → databricks_job          Workflow failure email notification
+```
+
+`terraform.tfvars` is gitignored — values never leave the local machine. `terraform.tfvars.example` is committed as a template showing the required keys without values.
+
 All Azure and Databricks resources are provisioned by Terraform (`terraform/`). A single `terraform apply` creates or updates:
 
 | Resource | Purpose |
