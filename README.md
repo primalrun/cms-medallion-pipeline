@@ -5,7 +5,7 @@ An end-to-end data engineering portfolio project on Azure Databricks using a Del
 ## Architecture
 
 ```
-CMS Open Data APIs
+CMS & HHS Open Data
         │
         ▼
 ┌───────────────────────────────────────────────────────────┐
