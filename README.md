@@ -11,7 +11,7 @@ CMS Open Data APIs
 ┌───────────────────────────────────────────────────────────┐
 │  Bronze Layer  (raw ingestion → ADLS Gen2 / Delta Lake)   │
 │  • ingest_medicare    — CMS API, 9.66M rows, paginated    │
-│  • ingest_medicaid    — HHS parquet, 238M rows, streamed  │
+│  • ingest_medicaid    — HHS parquet, 238M rows, batch     │
 └───────────────────────────┬───────────────────────────────┘
                             │
                             ▼
