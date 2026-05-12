@@ -99,7 +99,7 @@ cms-medallion-pipeline/
 Provider-level rollup: all Medicare providers left-joined to Medicaid. Key columns: `medicare_avg_payment_amt`, `medicaid_total_paid`, `bills_both_programs` flag (true when the provider appears in both programs).
 
 ### `agg_specialty_utilization`
-Specialty + HCPCS aggregation from Medicare silver. Includes `avg_charge_to_payment_gap` (submitted charge minus Medicare reimbursement).
+Specialty + HCPCS (Healthcare Common Procedure Coding System — standardized billing codes for medical services) aggregation from Medicare silver. Includes `avg_charge_to_payment_gap` (submitted charge minus Medicare reimbursement).
 
 ### `fraud_risk_indicators`
 Targets dual-billing providers (appear in both programs). Computes specialty benchmarks (avg, p95 services, stddev charges) and assigns a composite `risk_score` (0–3) based on:
