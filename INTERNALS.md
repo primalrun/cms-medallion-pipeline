@@ -78,7 +78,7 @@ Identifies providers who billed both Medicare and Medicaid in 2022 for the same 
 Before joining, both sides are aggregated to provider + HCPCS grain:
 
 - **Medicaid**: sum `total_patients`, `total_claim_lines`, `total_paid` across months; count distinct `claim_month` as `medicaid_months_billed`
-- **Medicare**: sum `total_beneficiaries` and `total_services`; average `avg_submitted_charge` and `avg_medicare_payment_amt`; take `first()` for `provider_specialty` and `provider_state` (a provider may bill from multiple locations, producing multiple specialty/state values per NPI+HCPCS — `first()` picks one representative value rather than exploding rows)
+- **Medicare**: sum `total_beneficiaries` and `total_services`; average `avg_submitted_charge` and `avg_medicare_payment_amt` — all billing measures are preserved across locations. `first()` is used for `provider_specialty` and `provider_state` — a provider may bill the same HCPCS from multiple locations, producing multiple specialty/state values per NPI+HCPCS; `first()` picks one representative value rather than exploding rows. No billing activity is lost by this choice.
 
 **Result**: ~240,000 rows (87,589 distinct overlapping NPIs × their shared HCPCS codes).
 
