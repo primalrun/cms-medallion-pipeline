@@ -168,7 +168,7 @@ All three tables write to the `dbw_cms_medallion_dev.gold` schema (Unity Catalog
 
 **Benchmarks computed inline** (CTE `specialty_benchmarks`): grouped by `provider_specialty + hcpcs_code`, computing:
 - `specialty_avg_submitted_charge` and `specialty_stddev_submitted_charge`
-- `specialty_avg_services` and `specialty_p95_services` (95th percentile via `percentile_approx`)
+- `specialty_avg_services` and `specialty_p95_services` — the 95th percentile of `medicare_total_services` across all providers in the same specialty/HCPCS group, computed via `percentile_approx`; a provider exceeding this threshold is in the top 5% by volume among peers
 
 **Risk flags** (each boolean):
 | Flag | Condition |
