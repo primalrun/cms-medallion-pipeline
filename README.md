@@ -93,7 +93,7 @@ cms-medallion-pipeline/
 ## Gold Layer Tables
 
 ### `agg_provider_spending`
-Provider-level rollup joining Medicare and Medicaid. Key columns: `medicare_avg_payment_amt`, `medicaid_total_paid`, `bills_both_programs` flag.
+Provider-level rollup: all Medicare providers left-joined to Medicaid. Key columns: `medicare_avg_payment_amt`, `medicaid_total_paid`, `bills_both_programs` flag (true when the provider appears in both programs).
 
 ### `agg_specialty_utilization`
 Specialty + HCPCS aggregation from Medicare silver. Includes `avg_charge_to_payment_gap` (submitted charge minus Medicare reimbursement).
