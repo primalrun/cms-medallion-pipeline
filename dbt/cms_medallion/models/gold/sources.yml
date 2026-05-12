@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: silver
+    catalog: dbw_cms_medallion_dev
+    schema: default
+    tables:
+      - name: medicare
+      - name: medicaid
+      - name: provider_overlap

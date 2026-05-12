@@ -1,0 +1,4 @@
+subscription_id = "your-azure-subscription-id"
+location        = "eastus"
+project         = "cms-medallion"
+environment     = "dev"

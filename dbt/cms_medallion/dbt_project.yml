@@ -1,0 +1,20 @@
+name: 'cms_medallion'
+version: '1.0.0'
+profile: 'cms_medallion'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  cms_medallion:
+    gold:
+      +materialized: table
+      +file_format: delta

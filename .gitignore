@@ -1,0 +1,22 @@
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/terraform.tfvars
+
+# dbt
+dbt/.venv/
+dbt/cms_medallion/target/
+dbt/cms_medallion/logs/
+dbt/logs/
+dbt/profiles.yml
+~/.dbt/profiles.yml
+
+# Python
+__pycache__/
+*.pyc
+.env
+
+# OS
+.DS_Store
