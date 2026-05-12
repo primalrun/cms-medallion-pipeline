@@ -37,7 +37,7 @@ profiles = {
             "dev": {
                 "type":      "databricks",
                 "host":      host,
-                "http_path": "sql/protocolv1/o/7405614851605267/0506-211442-yut4misi",
+                "http_path": "sql/protocolv1/o/<workspace-id>/<warehouse-id>",
                 "token":     pat,
                 "catalog":   "dbw_cms_medallion_dev",
                 "schema":    "gold",
