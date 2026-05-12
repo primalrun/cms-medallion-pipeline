@@ -238,11 +238,11 @@ The Databricks PAT is stored in secret scope `cms`, key `databricks_pat`, provis
 
 ### dbt — Local Development
 
-dbt models live in `dbt/cms_medallion/models/gold/`. A Python virtual environment under `dbt/.venv/` holds `dbt-databricks` and dependencies. Connection is configured via `~/.dbt/profiles.yml` (gitignored), targeting the SQL warehouse HTTP path and authenticating with the PAT.
+dbt serves as the local development tool for gold layer SQL. The models in `dbt/cms_medallion/models/gold/` contain the same logic as `run_gold_models.py` — iterating on SQL locally with `dbt run` connects to the Databricks SQL warehouse and writes results to `dbw_cms_medallion_dev.gold`, allowing fast feedback before promoting changes to the workflow notebook.
 
-`dbt_project.yml` configures all gold models to materialize as Delta tables in the `gold` schema of the `dbw_cms_medallion_dev` catalog. `models/gold/sources.yml` declares the silver tables as dbt sources pointing at `dbw_cms_medallion_dev.default` (the Unity Catalog schema where silver Delta tables are registered).
+`dbt_project.yml` configures all models to materialize as Delta tables. `models/gold/sources.yml` declares the silver tables as dbt sources pointing at `dbw_cms_medallion_dev.default`. Connection is via `~/.dbt/profiles.yml` (gitignored), authenticating with the PAT.
 
-The `dbt/` directory is committed for reference and local iteration. The Databricks Workflow does not run dbt — it runs `run_gold_models.py` instead, which contains the same SQL executed via `spark.sql()`. This avoids the `dbt-databricks` / Databricks internal protobuf version conflict that occurs when installing dbt inside a running notebook.
+The workflow does not run dbt — `%pip install dbt-databricks` inside a notebook upgrades protobuf, breaking Databricks internals. `run_gold_models.py` runs the same SQL via `spark.sql()` instead.
 
 ### Workflow Task Dependencies
 
