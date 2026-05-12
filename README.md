@@ -52,7 +52,7 @@ For a deep dive into process flow, grain decisions, and dependency management, s
 | Compute | Databricks PySpark (Spark 15.4 / Scala 2.12) |
 | Gold transforms | dbt-databricks (local dev), Spark SQL notebook (workflow) |
 | Orchestration | Databricks Workflows (Jobs) |
-| Infrastructure | Terraform (azurerm + databricks providers) |
+| Infrastructure | Terraform (azurerm provider for Azure resources, databricks provider for cluster/workflow/Unity Catalog) |
 | Auth | Managed identity via Databricks Access Connector |
 
 ## Data Sources
