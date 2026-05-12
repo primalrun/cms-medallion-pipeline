@@ -30,5 +30,4 @@ variable "databricks_pat" {
 variable "alert_email" {
   description = "Email address for workflow failure alerts"
   type        = string
-  default     = "jasonwalker15@gmail.com"
 }
