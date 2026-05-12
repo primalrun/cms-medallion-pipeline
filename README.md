@@ -115,6 +115,8 @@ Targets dual-billing providers (appear in both programs). Computes specialty ben
 
 **Unity Catalog auth via managed identity** — ADLS Gen2 access uses a Databricks Access Connector (system-assigned managed identity) with `Storage Blob Data Contributor` role, avoiding storage account keys entirely.
 
+**Idempotent pipeline tasks** — every task can be safely re-run after a failure without manual cleanup. Medicare ingestion overwrites on the first batch and appends deterministically; Medicaid, silver, and gold all use overwrite or `CREATE OR REPLACE TABLE` semantics.
+
 **dbt for local development, Spark SQL for the workflow** — dbt-databricks runs cleanly from a local venv for iterative SQL development. In-notebook `%pip install dbt-databricks` conflicts with Databricks' internal protobuf version; the workflow task instead runs the same SQL directly via `spark.sql()`.
 
 ## Setup
