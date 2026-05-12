@@ -135,7 +135,7 @@ All three tables write to the `dbw_cms_medallion_dev.gold` schema (Unity Catalog
 
 **Useful for**: charge-vs-payment gap analysis by specialty/state; dual-program participation rates; Medicare reimbursement rate comparisons.
 
-**Note**: Total Medicare dollars collected cannot be derived from this table — `medicare_avg_payment_amt` is an average of averages across HCPCS codes, not a per-claim figure. Provider-level totals are better computed from `fraud_risk_indicators` at the provider/HCPCS grain.
+**Note**: Total Medicare dollars collected cannot be derived from this table — `medicare_avg_payment_amt` is an average of averages across HCPCS codes, not a per-claim figure. Provider-level totals would need to be computed from `silver.medicare` directly before the averaging aggregation. `fraud_risk_indicators` has per-HCPCS service counts but only covers dual-billing providers, not all Medicare providers.
 
 ---
 
@@ -203,7 +203,7 @@ All Azure and Databricks resources are provisioned by Terraform (`terraform/`). 
 | `databricks_external_location` × 3 | Unity Catalog external locations for bronze/silver/gold |
 | `databricks_cluster` | Single-node dev cluster, `SINGLE_USER` mode, 30-min auto-terminate |
 | `databricks_secret_scope` + `databricks_secret` | Scope `cms`, key `databricks_pat` (PAT for dbt local dev) |
-| `databricks_workspace_file` × 4 | dbt project files pushed to Databricks workspace |
+| `databricks_workspace_file` × 5 | dbt project files pushed to Databricks workspace |
 | `databricks_job` | 5-task workflow with email failure alerts |
 
 **Providers**: `hashicorp/azurerm ~> 3.110` and `databricks/databricks ~> 1.50`. The Databricks provider authenticates to the workspace via `azure_workspace_resource_id` (using the Azure CLI session — no separate Databricks token needed for Terraform).
