@@ -135,7 +135,7 @@ terraform apply
 
 ### 2. Upload notebooks to Databricks workspace
 
-Import the four notebooks from `notebooks/` into your Databricks workspace, maintaining the `bronze/`, `silver/`, `gold/` folder structure under your user directory.
+Import the five notebooks from `notebooks/` into your Databricks workspace, maintaining the `bronze/`, `silver/`, `gold/` folder structure under your user directory.
 
 ### 3. Run the workflow
 
