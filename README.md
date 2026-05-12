@@ -41,6 +41,8 @@ bronze_medicaid ─┘
 
 ![Databricks Workflow](docs/workflow.png)
 
+For a deep dive into process flow, grain decisions, and dependency management, see [INTERNALS.md](INTERNALS.md).
+
 ## Stack
 
 | Layer | Technology |
