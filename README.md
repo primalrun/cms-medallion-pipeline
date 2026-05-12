@@ -24,7 +24,7 @@ CMS Open Data APIs
                             │
                             ▼
 ┌───────────────────────────────────────────────────────────┐
-│  Gold Layer  (analytics-ready Delta tables via dbt SQL)    │
+│  Gold Layer  (analytics-ready Delta tables via Spark SQL)  │
 │  • agg_provider_spending     — Medicare + Medicaid join    │
 │  • agg_specialty_utilization — HCPCS utilization by spec  │
 │  • fraud_risk_indicators     — dual-billing risk scoring  │
@@ -76,7 +76,8 @@ cms-medallion-pipeline/
 │   │   ├── transform_providers.py      # Clean, type, join → 3 silver tables
 │   │   └── data_quality.py            # DQ checks (critical vs. non-critical)
 │   └── gold/
-│       └── run_gold_models.py          # Spark SQL gold tables (workflow target)
+│       ├── run_gold_models.py          # Spark SQL gold tables (workflow target)
+│       └── run_dbt.py                  # dbt via Python API (reference only — not used by workflow)
 ├── dbt/
 │   └── cms_medallion/
 │       ├── dbt_project.yml
