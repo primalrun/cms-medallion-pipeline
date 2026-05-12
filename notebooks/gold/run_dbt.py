@@ -1,6 +1,10 @@
 # Databricks notebook source
 # Gold Layer: Run dbt models via dbt Python API
 # Reads from silver Delta tables, writes gold Delta tables to dbw_cms_medallion_dev.gold
+#
+# NOTE: This notebook is kept for reference only and is NOT used by the Databricks Workflow.
+# Installing dbt-databricks inside a notebook upgrades protobuf, breaking Databricks internals.
+# The workflow runs run_gold_models.py instead, which executes the same SQL via spark.sql().
 
 # COMMAND ----------
 
