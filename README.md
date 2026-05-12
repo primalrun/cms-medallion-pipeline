@@ -108,7 +108,7 @@ Targets dual-billing providers (appear in both programs). Computes specialty ben
 
 ## Key Design Decisions
 
-**Batch writes for bronze ingestion** — The Medicare API returns 9.66M rows via pagination. Writing each 5,000-row page directly to Delta (overwrite first, append thereafter) avoids accumulating the full dataset in driver memory. The Medicaid parquet (238M rows) is streamed to ADLS via `dbutils.fs.cp` before Spark reads it, bypassing the `/tmp` restriction in Unity Catalog.
+**Batch writes for bronze ingestion** — The Medicare API returns 9.66M rows via pagination. Writing each 5,000-row page directly to Delta (overwrite first, append thereafter) avoids accumulating the full dataset in driver memory. The Medicaid parquet (238M rows) is copied directly to ADLS staging via `dbutils.fs.cp` before Spark reads it, bypassing the `/tmp` restriction in Unity Catalog.
 
 **Silver grain normalization** — Raw Medicare has one row per provider/HCPCS/place-of-service, causing fan-out when joining. Silver aggregates to provider/HCPCS grain using `first()` for provider metadata (specialty, state). Raw Medicaid has one row per billing provider/servicing provider/HCPCS/month; silver aggregates to billing provider/HCPCS/month.
 
