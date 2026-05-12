@@ -61,6 +61,8 @@ Column rename and type casting from raw CMS field names (e.g. `Rndrng_NPI` → `
 
 **Grain**: one row per provider (`Rndrng_NPI`) + HCPCS code + place of service. This is the raw grain from CMS — a provider billing the same HCPCS from multiple office locations produces multiple rows.
 
+When aggregated for the overlap join (see `silver/provider_overlap` below), all billing measures (`total_services`, `total_beneficiaries`, payment amounts) are summed or averaged across locations so no activity is lost. Provider metadata (`provider_specialty`, `provider_state`) uses `first()` — picking one representative value rather than exploding the grain — since a provider's specialty and state are stable attributes unlikely to vary meaningfully across locations.
+
 #### `silver/medicaid`
 Raw Medicaid data has one row per billing provider + servicing provider + HCPCS + claim month. The servicing provider is the individual who performed the service; the billing provider is the entity that submitted the claim. For cross-program analysis the relevant identity is the billing provider.
 
