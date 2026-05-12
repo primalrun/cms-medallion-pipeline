@@ -4,6 +4,22 @@ Technical reference covering process flow, data grain decisions, dependency mana
 
 ---
 
+## Idempotency
+
+All pipeline tasks are idempotent — re-running any task produces the same result regardless of prior state:
+
+| Task | Mechanism |
+|---|---|
+| `ingest_medicare` | First batch `mode="overwrite"` recreates the table fresh; subsequent appends fill it deterministically |
+| `ingest_medicaid` | Single batch `mode="overwrite"` replaces the table completely |
+| `transform_providers` | All three silver tables written with `mode="overwrite"` |
+| `data_quality` | Read-only — no state written |
+| `run_gold_models` | `CREATE OR REPLACE TABLE` replaces each gold table on every run |
+
+This means any task can be safely re-run after a failure without manual cleanup.
+
+---
+
 ## Pipeline Process Flow
 
 ```
