@@ -144,6 +144,19 @@ Targets dual-billing providers (appear in both programs). Computes specialty ben
 
 **dbt for local development, Spark SQL for the workflow** — dbt-databricks runs cleanly from a local venv for iterative SQL development. In-notebook `%pip install dbt-databricks` conflicts with Databricks' internal protobuf version; the workflow task instead runs the same SQL directly via `spark.sql()`.
 
+## Approximate Cost
+
+Based on a single full pipeline run (~4.5 hours) on Azure East US:
+
+| Resource | Estimated Cost |
+|---|---|
+| Databricks cluster (Standard_D4s_v3, ~4.5 hrs) | ~$3.00 |
+| ADLS Gen2 storage (~50 GB data + transactions) | ~$1.50 |
+| Databricks workspace (Premium SKU, idle) | ~$0.00 |
+| **Total per run** | **~$4.50** |
+
+Costs are approximate and vary by region and Azure pricing tier. The cluster auto-terminates after 30 minutes of inactivity so leaving it idle between runs incurs no compute cost.
+
 ## Setup
 
 ### Prerequisites

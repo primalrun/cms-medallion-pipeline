@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  terraform-validate:
+    name: Terraform Validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~1.5"
+
+      - name: Terraform Init
+        working-directory: terraform
+        run: terraform init -backend=false
+
+      - name: Terraform Validate
+        working-directory: terraform
+        run: terraform validate
+
+  dbt-compile:
+    name: dbt Compile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dbt
+        run: pip install dbt-databricks
+
+      - name: Write profiles.yml
+        run: |
+          mkdir -p ~/.dbt
+          cat <<EOF > ~/.dbt/profiles.yml
+          cms_medallion:
+            outputs:
+              dev:
+                type: databricks
+                host: placeholder.azuredatabricks.net
+                http_path: /sql/protocolv1/o/0/0
+                token: placeholder
+                catalog: dbw_cms_medallion_dev
+                schema: gold
+                threads: 1
+            target: dev
+          EOF
+
+      - name: dbt Compile
+        working-directory: dbt/cms_medallion
+        run: dbt compile --profiles-dir ~/.dbt

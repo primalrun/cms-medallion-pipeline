@@ -50,7 +50,7 @@ After all pages are written, `OPTIMIZE` compacts the thousands of small Delta fi
 
 Two audit columns are added at ingest: `_ingested_at` (timestamp) and `_source` (literal string identifying the dataset version).
 
-**Result**: 9,660,647 rows across ~1,933 API pages.
+**Result**: 9,660,647 rows across ~1,933 API pages. Final bronze row count: 9,660,647.
 
 ### `ingest_medicaid_fraud.py`
 Ingests Medicaid Provider Spending data (2018–2024) released by HHS as a single large Parquet file (238M rows).
@@ -63,7 +63,7 @@ Unity Catalog blocks writes to local `/tmp` — only paths under `/Workspace` or
 
 `OPTIMIZE` runs after write to compact files.
 
-**Result**: 238,015,729 rows.
+**Result**: 238,015,729 rows. Final bronze row count: 238,015,729.
 
 ---
 
@@ -86,7 +86,7 @@ The table is filtered to `CLAIM_FROM_MONTH` between `2022-01` and `2022-12` (ali
 
 **Grain**: one row per billing `provider_npi` + `hcpcs_code` + `claim_month`.
 
-**Result**: 20,290,000+ rows (one year of Medicaid billing activity).
+**Result**: 20,291,864 rows (one year of Medicaid billing activity).
 
 #### `silver/provider_overlap`
 Identifies providers who billed both Medicare and Medicaid in 2022 for the same HCPCS code. Produced by an inner join on `provider_npi + hcpcs_code`.
@@ -96,7 +96,7 @@ Before joining, both sides are aggregated to provider + HCPCS grain:
 - **Medicaid**: sum `total_patients`, `total_claim_lines`, `total_paid` across months; count distinct `claim_month` as `medicaid_months_billed`
 - **Medicare**: sum `total_beneficiaries` and `total_services`; average `avg_submitted_charge` and `avg_medicare_payment_amt` — all billing measures are preserved across locations. `first()` is used for `provider_specialty` and `provider_state` — a provider may bill the same HCPCS from multiple locations, producing multiple specialty/state values per NPI+HCPCS; `first()` picks one representative value rather than exploding rows. No billing activity is lost by this choice.
 
-**Result**: ~240,000 rows (87,589 distinct overlapping NPIs × their shared HCPCS codes).
+**Result**: 239,997 rows (87,589 distinct overlapping NPIs × their shared HCPCS codes).
 
 ### `data_quality.py`
 Runs after `transform_providers.py`. Validates all three silver tables before gold models execute.
@@ -149,6 +149,8 @@ All three tables write to the `dbw_cms_medallion_dev.gold` schema (Unity Catalog
 - `bills_both_programs` — true when the provider has a Medicaid match
 - `medicare_distinct_hcpcs_count` / `medicaid_distinct_hcpcs_count` — breadth of service mix
 
+**Result**: 1,175,281 rows.
+
 **Useful for**: charge-vs-payment gap analysis by specialty/state; dual-program participation rates; Medicare reimbursement rate comparisons.
 
 **Note**: Total Medicare dollars collected cannot be derived from this table — `medicare_avg_payment_amt` is an average of averages across HCPCS codes, not a per-claim figure. Provider-level totals would need to be computed from `silver.medicare` directly before the averaging aggregation. `fraud_risk_indicators` has per-HCPCS service counts but only covers dual-billing providers, not all Medicare providers.
@@ -169,6 +171,8 @@ All three tables write to the `dbw_cms_medallion_dev.gold` schema (Unity Catalog
 - `avg_medicare_payment_amt` — average Medicare reimbursement for this procedure in this specialty
 - `avg_submitted_charge` — average billed amount
 - `avg_charge_to_payment_gap` — `avg_submitted_charge - avg_medicare_payment_amt`; how much more providers charge vs. what Medicare pays
+
+**Result**: 48,165 rows.
 
 **Useful for**: identifying which procedures have the largest charge-to-payment gaps; benchmarking a specific provider's rates against their specialty peers (used internally by `fraud_risk_indicators`); spotting HCPCS codes billed by unusually many or few providers within a specialty.
 
@@ -196,6 +200,8 @@ All three tables write to the `dbw_cms_medallion_dev.gold` schema (Unity Catalog
 **`risk_score`**: sum of the three flags (0–3). A score of 3 means the provider is a high-volume, high-charge, high-Medicaid-spend outlier for that procedure within their specialty.
 
 **`charge_ratio_vs_specialty`**: `medicare_avg_submitted_charge / specialty_avg_submitted_charge`, rounded to 2 decimal places. A ratio of 2.5 means the provider bills 2.5× the specialty average for that code.
+
+**Result**: 239,997 rows (same grain as `silver/provider_overlap` — every dual-billing provider/HCPCS combination receives a risk score).
 
 **Useful for**: ranking dual-billing providers by composite risk; filtering to `risk_score = 3` for highest-priority review candidates; analyzing whether high-charge providers are also high-volume, or whether the signals are independent.
 
