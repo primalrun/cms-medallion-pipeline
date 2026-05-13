@@ -88,6 +88,12 @@ cms-medallion-pipeline/
 │           └── fraud_risk_indicators.sql
 ├── docs/
 │   ├── workflow.png                    # Databricks Workflow DAG screenshot
+│   ├── charge_gap_by_specialty.png     # Query result screenshot
+│   ├── dual_billing_by_specialty.png   # Query result screenshot
+│   ├── highest_risk_providers_1.png    # Query result screenshot
+│   ├── highest_risk_providers_2.png    # Query result screenshot
+│   ├── state_reimbursement_comparison.png # Query result screenshot
+│   ├── top_hcpcs_high_risk.png         # Query result screenshot
 │   └── commands.md                     # Chronological CLI steps used to build the project
 ├── queries/
 │   ├── highest_risk_providers.sql      # risk_score = 3 dual billers ranked by charge ratio
