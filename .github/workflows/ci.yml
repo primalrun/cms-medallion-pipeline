@@ -57,4 +57,4 @@ jobs:
 
       - name: dbt Compile
         working-directory: dbt/cms_medallion
-        run: dbt compile --profiles-dir ~/.dbt
+        run: dbt compile --profiles-dir ~/.dbt --no-populate-cache
