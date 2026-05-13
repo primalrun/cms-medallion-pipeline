@@ -86,6 +86,9 @@ cms-medallion-pipeline/
 │           ├── agg_provider_spending.sql
 │           ├── agg_specialty_utilization.sql
 │           └── fraud_risk_indicators.sql
+├── docs/
+│   ├── workflow.png                    # Databricks Workflow DAG screenshot
+│   └── commands.md                     # Chronological CLI steps used to build the project
 ├── queries/
 │   ├── highest_risk_providers.sql      # risk_score = 3 dual billers ranked by charge ratio
 │   ├── charge_gap_by_specialty.sql     # specialties with largest charge-to-payment gap
