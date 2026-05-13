@@ -86,6 +86,12 @@ cms-medallion-pipeline/
 │           ├── agg_provider_spending.sql
 │           ├── agg_specialty_utilization.sql
 │           └── fraud_risk_indicators.sql
+├── queries/
+│   ├── highest_risk_providers.sql      # risk_score = 3 dual billers ranked by charge ratio
+│   ├── charge_gap_by_specialty.sql     # specialties with largest charge-to-payment gap
+│   ├── dual_billing_by_specialty.sql   # dual-billing participation rate by specialty
+│   ├── state_reimbursement_comparison.sql # Medicare payment variation by state
+│   └── top_hcpcs_high_risk.sql        # procedures most common among high-risk providers
 └── terraform/
     ├── main.tf                         # All Azure + Databricks resources
     ├── variables.tf
