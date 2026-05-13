@@ -50,7 +50,7 @@ After all pages are written, `OPTIMIZE` compacts the thousands of small Delta fi
 
 Two audit columns are added at ingest: `_ingested_at` (timestamp) and `_source` (literal string identifying the dataset version).
 
-**Result**: 9,660,647 rows across ~1,933 API pages. Final bronze row count: 9,660,647.
+**Result**: 9,660,647 rows across ~1,933 API pages.
 
 ### `ingest_medicaid_fraud.py`
 Ingests Medicaid Provider Spending data (2018–2024) released by HHS as a single large Parquet file (238M rows).
@@ -63,7 +63,7 @@ Unity Catalog blocks writes to local `/tmp` — only paths under `/Workspace` or
 
 `OPTIMIZE` runs after write to compact files.
 
-**Result**: 238,015,729 rows. Final bronze row count: 238,015,729.
+**Result**: 238,015,729 rows.
 
 ---
 
@@ -76,6 +76,8 @@ Produces three silver Delta tables.
 Column rename and type casting from raw CMS field names (e.g. `Rndrng_NPI` → `provider_npi`, `Avg_Mdcr_Pymt_Amt` → `avg_medicare_payment_amt`). String columns containing numeric values are cast to `DoubleType` or `IntegerType`. Rows with null NPI or HCPCS are filtered out. A `snapshot_year = 2022` column is added.
 
 **Grain**: one row per provider (`Rndrng_NPI`) + HCPCS code + place of service. This is the raw grain from CMS — a provider billing the same HCPCS from multiple office locations produces multiple rows.
+
+**Result**: 9,660,647 rows.
 
 When aggregated for the overlap join (see `silver/provider_overlap` below), all billing measures (`total_services`, `total_beneficiaries`, payment amounts) are summed or averaged across locations so no activity is lost. Provider metadata (`provider_specialty`, `provider_state`) uses `first()` — picking one representative value rather than exploding the grain — since a provider's specialty and state are stable attributes unlikely to vary meaningfully across locations.
 

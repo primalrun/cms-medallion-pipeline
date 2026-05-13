@@ -86,6 +86,9 @@ cms-medallion-pipeline/
 │           ├── agg_provider_spending.sql
 │           ├── agg_specialty_utilization.sql
 │           └── fraud_risk_indicators.sql
+├── .github/
+│   └── workflows/
+│       └── ci.yml                      # Terraform validate + dbt compile on every push
 ├── docs/
 │   ├── workflow.png                    # Databricks Workflow DAG screenshot
 │   ├── charge_gap_by_specialty.png     # Query result screenshot
