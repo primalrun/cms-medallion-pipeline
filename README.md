@@ -102,6 +102,16 @@ cms-medallion-pipeline/
     └── terraform.tfvars.example
 ```
 
+## Query Results
+
+| Query | Screenshot |
+|---|---|
+| Highest risk dual-billing providers | [view](docs/highest_risk_providers_1.png) · [view 2](docs/highest_risk_providers_2.png) |
+| Charge-to-payment gap by specialty | [view](docs/charge_gap_by_specialty.png) |
+| Dual-billing participation by specialty | [view](docs/dual_billing_by_specialty.png) |
+| Medicare reimbursement by state | [view](docs/state_reimbursement_comparison.png) |
+| Top HCPCS codes among high-risk providers | [view](docs/top_hcpcs_high_risk.png) |
+
 ## Gold Layer Tables
 
 ### `agg_provider_spending`
