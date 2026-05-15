@@ -19,7 +19,7 @@ silver_overlap_path  = f"abfss://silver@{storage_account}.dfs.core.windows.net/p
 
 def run_dq_checks(name, df, checks):
     """
-    Runs a list of (label, condition_col) checks against df.
+    Runs a list of (label, condition, critical) checks against df.
     Prints PASS/FAIL for each and raises if any critical check fails.
     """
     print(f"\n── {name} ──────────────────────────────")
