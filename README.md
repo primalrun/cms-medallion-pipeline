@@ -145,7 +145,7 @@ Targets dual-billing providers (appear in both programs). Computes specialty ben
 
 **Idempotent pipeline tasks** — every task can be safely re-run after a failure without manual cleanup. Medicare ingestion overwrites on the first batch and appends deterministically; Medicaid, silver, and gold all use overwrite or `CREATE OR REPLACE TABLE` semantics.
 
-**dbt for local development, Spark SQL for the workflow** — dbt-databricks runs cleanly from a local venv for iterative SQL development. In-notebook `%pip install dbt-databricks` conflicts with Databricks' internal protobuf version; the workflow task instead runs the same SQL directly via `spark.sql()`.
+**dbt for local development, Spark SQL for the workflow** — dbt-databricks runs cleanly from a local venv for iterative SQL development. In-notebook `%pip install dbt-databricks` conflicts with Databricks' internal protobuf version — installing dbt-databricks at runtime upgrades protobuf to a newer incompatible version, breaking Databricks' own internal libraries that depend on the older version. The workflow task instead runs the same SQL directly via `spark.sql()`.
 
 ## Approximate Cost
 

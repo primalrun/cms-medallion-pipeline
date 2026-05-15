@@ -302,7 +302,7 @@ dbt serves as the local development tool for gold layer SQL. The models in `dbt/
 
 `dbt_project.yml` configures all models to materialize as Delta tables. `models/gold/sources.yml` declares the silver tables as dbt sources pointing at `dbw_cms_medallion_dev.default`. Connection is via `~/.dbt/profiles.yml` (gitignored), authenticating with the PAT.
 
-The workflow does not run dbt — `%pip install dbt-databricks` inside a notebook upgrades protobuf, breaking Databricks internals. `run_gold_models.py` runs the same SQL via `spark.sql()` instead.
+The workflow does not run dbt — `%pip install dbt-databricks` inside a notebook upgrades protobuf to a newer incompatible version, breaking Databricks' own internal libraries that depend on the older version. `run_gold_models.py` runs the same SQL via `spark.sql()` instead.
 
 ### Workflow Task Dependencies
 
